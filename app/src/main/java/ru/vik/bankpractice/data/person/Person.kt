@@ -8,13 +8,13 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "person")
 data class Person(
 
+    // Первичный ключ - ID, автогенерация ID библиотекой Room включена
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+
     // Столбцы: Имя, фамилия, дата рождения, пол
     val firstName: String,
     val lastName: String,
     val birthDate: String,
     val sex: String,
-
-    // Первичный ключ - ID, автогенерация ID библиотекой Room включена
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0
 )

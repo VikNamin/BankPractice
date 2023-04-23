@@ -10,7 +10,7 @@ import ru.vik.bankpractice.data.BankDatabase
 
 class PersonViewModel(application: Application): AndroidViewModel(application) {
 
-    private val readAllData: LiveData<List<Person>>
+    val readAllData: LiveData<List<Person>>
     private val repository: PersonRepository
 
     init {

@@ -5,8 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import ru.vik.bankpractice.R
+import ru.vik.bankpractice.data.person.PersonViewModel
 import ru.vik.bankpractice.databinding.FragmentListBinding
 
 class  ListFragment : Fragment() {
@@ -14,13 +19,23 @@ class  ListFragment : Fragment() {
     var _binding: FragmentListBinding? = null
     private val myBindClass get() = _binding!!
 
-//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        val view = inflater.inflate(R.layout.fragment_list, container, false)
-//        return view
-//    }
+    private lateinit var personViewModel: PersonViewModel
+    private lateinit var adapter: ListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding= FragmentListBinding.inflate(inflater,container,false)
+
+        adapter = ListAdapter()
+
+        val layoutManager = LinearLayoutManager(context)
+        myBindClass.recyclerViewPerson.layoutManager = layoutManager
+        myBindClass.recyclerViewPerson.adapter = adapter
+
+        personViewModel = ViewModelProvider(this)[PersonViewModel::class.java]
+        personViewModel.readAllData.observe(viewLifecycleOwner, Observer { person ->
+            adapter.setData(person)
+        })
+
         return myBindClass.root
     }
 

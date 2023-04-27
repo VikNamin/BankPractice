@@ -1,6 +1,5 @@
 package ru.vik.bankpractice.fragments.add
 
-import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.os.Bundle
@@ -13,9 +12,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import ru.vik.bankpractice.R
-import ru.vik.bankpractice.data.person.Person
-import ru.vik.bankpractice.data.person.PersonViewModel
+import ru.vik.bankpractice.model.Person
+import ru.vik.bankpractice.viewmodel.PersonViewModel
 import ru.vik.bankpractice.databinding.FragmentAddBinding
+import ru.vik.bankpractice.utils.InputChecker
 import java.util.*
 
 
@@ -56,10 +56,17 @@ class AddFragment : Fragment() {
     // Метод добавление пользователя в БД
     private fun insertPersonToDatabase() {
 
+        val checker = InputChecker()
+
         // Проверка на корректность ввода данных
-        if (!checkInput()){
-            return
-        }
+        if (!checker.checkInput(
+                myBindClass.editTextPersonFirstName,
+                myBindClass.editTextPersonLastName,
+                myBindClass.radioMan,
+                myBindClass.radioWoman,
+                myBindClass.buttonDatePicker,
+                context))
+        { return }
 
         // Взятие данных из EditText и RadioButton, при необходимости делаем первую букву строчной
         val firstName = myBindClass.editTextPersonFirstName.text.toString().replaceFirstChar { it.uppercaseChar() }
@@ -78,34 +85,6 @@ class AddFragment : Fragment() {
 
         // Возвращение к списку пользователей при успешном добавлении пользователя
         findNavController().navigate(R.id.action_addFragment_to_listFragment)
-    }
-
-    // Метод проверки корректности данных
-    private fun checkInput(): Boolean {
-        when {
-            // Если данные не пустая строка при удалении всех пробелов
-            myBindClass.editTextPersonFirstName.text.filter { !it.isWhitespace() }.toString() == "" -> {
-                Toast.makeText(context, "Введите корректное Имя!", Toast.LENGTH_SHORT).show()
-                return false
-            }
-            // Если данные не пустая строка при удалении всех пробелов
-            myBindClass.editTextPersonLastName.text.filter { !it.isWhitespace() }.toString() == "" -> {
-                Toast.makeText(context, "Введите корректную Фамилию!", Toast.LENGTH_SHORT).show()
-                return false
-            }
-            // Если выбрано хотя бы один RadioButton из группы
-            !myBindClass.radioMan.isChecked && !myBindClass.radioWoman.isChecked -> {
-                Toast.makeText(context, "Обязательно выберите Пол!", Toast.LENGTH_SHORT).show()
-                return false
-            }
-            // Если данные не пустая строка при удалении всех НЕ цифр
-            myBindClass.buttonDatePicker.text.filter { it.isDigit() }.toString() == "" -> {
-                Toast.makeText(context, "Введите корректную Дату Рождения!", Toast.LENGTH_SHORT).show()
-                return false
-            }
-        }
-        // Значит данные корректны
-        return true
     }
 
     // Метод инициализации выборщика дат
@@ -132,5 +111,11 @@ class AddFragment : Fragment() {
     // Метод показа диалогового окна с календарём
     private fun openDatePickerDialog() {
         datePickerDialog.show()
+    }
+
+    // Удаляем binding во избежания утечек памяти
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

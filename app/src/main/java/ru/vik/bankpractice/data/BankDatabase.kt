@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import ru.vik.bankpractice.data.person.Person
+import ru.vik.bankpractice.model.Person
 import ru.vik.bankpractice.data.person.PersonDao
 
 // Таблицы, входящие в БД и версия БД

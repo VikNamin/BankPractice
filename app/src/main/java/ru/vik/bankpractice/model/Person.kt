@@ -1,10 +1,13 @@
-package ru.vik.bankpractice.data.person
+package ru.vik.bankpractice.model
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
 // Data класс объектов типа Клиент
 // название таблицы -> person
+@Parcelize
 @Entity(tableName = "person")
 data class Person(
 
@@ -17,4 +20,4 @@ data class Person(
     val lastName: String,
     val birthDate: String,
     val sex: String,
-)
+): Parcelable

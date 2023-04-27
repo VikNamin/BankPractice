@@ -9,9 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import ru.vik.bankpractice.R
-import ru.vik.bankpractice.data.person.PersonViewModel
+import ru.vik.bankpractice.viewmodel.PersonViewModel
 import ru.vik.bankpractice.databinding.FragmentListBinding
 
 class  ListFragment : Fragment() {
@@ -45,5 +44,11 @@ class  ListFragment : Fragment() {
         myBindClass.floatingActionButtonAddPerson.setOnClickListener {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
         }
+    }
+
+    // Удаляем binding во избежания утечек памяти
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

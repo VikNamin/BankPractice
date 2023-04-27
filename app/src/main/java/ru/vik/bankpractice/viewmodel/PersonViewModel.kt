@@ -1,4 +1,4 @@
-package ru.vik.bankpractice.data.person
+package ru.vik.bankpractice.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.vik.bankpractice.data.BankDatabase
+import ru.vik.bankpractice.repository.PersonRepository
+import ru.vik.bankpractice.model.Person
 
 class PersonViewModel(application: Application): AndroidViewModel(application) {
 
@@ -22,6 +24,12 @@ class PersonViewModel(application: Application): AndroidViewModel(application) {
     fun insertPerson(person: Person){
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertPerson(person)
+        }
+    }
+
+    fun updatePerson(person: Person){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updatePerson(person)
         }
     }
 

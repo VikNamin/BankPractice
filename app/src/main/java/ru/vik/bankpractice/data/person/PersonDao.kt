@@ -1,19 +1,21 @@
 package ru.vik.bankpractice.data.person
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Query
-import androidx.room.Upsert
+import androidx.room.*
+import ru.vik.bankpractice.model.Person
 
 // Интерфейс для работы с таблицей Person
 
 @Dao
 interface PersonDao {
 
-    // Функция Upsert (Insert)
-    @Upsert
+    // Функция Insert
+    @Insert
     suspend fun insertPerson(person: Person)
+
+    // Функция Update
+    @Update
+    suspend fun updatePerson(person: Person)
 
     // Функция Delete
     @Delete

@@ -7,7 +7,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 
 
 // TODO:    Доделать реализацию добавления записей в другие таблицы,
-// TODO:    реализовать удаление, редактирование, поиск по записям, сортировку, добавить комментарии
+// TODO:    реализовать удаление, поиск по записям, сортировку, добавить комментарии
 
 
 class MainActivity : AppCompatActivity() {

@@ -1,13 +1,15 @@
 package ru.vik.bankpractice.fragments.update
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -50,7 +52,47 @@ class UpdateFragment : Fragment() {
             updatePersonInDatabase()
         }
 
+        // Инициализация кнопки меню "Удалить"
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.delete_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.menu_delete -> {
+                        deletePerson()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         return myBindClass.root
+    }
+
+    // Метод удаления пользователя из таблицы
+    private fun deletePerson() {
+
+        // Вызов билдера диалогового окна
+        val builder = AlertDialog.Builder(requireContext())
+
+        // Создаём слушатель кнопки "Да"
+        builder.setPositiveButton("Да"){_,_ ->
+
+            // Вызываем метод удаления пользователя из вьюмодели, выводим тост сообщение и вызываем навигацию на фрагмент списка
+            personViewModel.deletePerson(args.currentPerson)
+            Toast.makeText(requireContext(), "Пользователь успешно удалён", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+        }
+        builder.setNegativeButton("Нет"){_,_ -> }
+
+        // Устанавливаем тайтл, сообщение и выводим диалоговое окно
+        builder.setTitle("Удалить ${args.currentPerson.firstName} ${args.currentPerson.lastName}?")
+        builder.setMessage("Вы действительно хотите удалить пользователя?")
+        builder.create().show()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -33,4 +33,9 @@ class PersonViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun deletePerson(person: Person){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deletePerson(person)
+        }
+    }
 }
